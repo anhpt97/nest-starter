@@ -7,12 +7,15 @@ import {
   Post,
   Put,
   Query,
+  Res,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { ApiPagination, ApiResponse } from '~/common/decorators';
 import { PaginationQuery } from '~/common/dto';
+import { UserRole, UserStatus } from '~/common/enums';
 import { User } from '~/entities';
-import { CreateUserDto, UpdateUserDto, UserParams } from './user.dto';
+import { UserDto, UserParams, UserQuery } from './user.dto';
 import { PaginatedUser } from './user.model';
 import { UserService } from './user.service';
 
@@ -28,6 +31,37 @@ export class UserController {
     return this.userService.getList(query);
   }
 
+  @Get('roles')
+  @ApiResponse({ example: Object.values(UserRole) })
+  getRoles(@Query() query: UserQuery) {
+    return this.userService.getRoles(query);
+  }
+
+  @Get('statuses')
+  @ApiResponse({ example: Object.values(UserStatus) })
+  getStatuses(@Query() query: UserQuery) {
+    return this.userService.getStatuses(query);
+  }
+
+  @Get('preview')
+  preview(@Res() res: Response) {
+    const pdfDoc = this.userService.generateFile();
+    res.set({
+      'Content-Disposition': 'inline; filename="file.pdf"',
+      'Content-Type': 'application/pdf',
+    });
+    pdfDoc.pipe(res);
+    pdfDoc.end();
+  }
+
+  @Get('download')
+  download(@Res() res: Response) {
+    const pdfDoc = this.userService.generateFile();
+    res.attachment('file.pdf');
+    pdfDoc.pipe(res);
+    pdfDoc.end();
+  }
+
   @Get(':id')
   @ApiResponse({ model: User })
   get(@Param() { id }: UserParams) {
@@ -35,19 +69,19 @@ export class UserController {
   }
 
   @Post()
-  @ApiResponse({ example: true })
-  create(@Body() dto: CreateUserDto) {
+  @ApiResponse({ model: Boolean })
+  create(@Body() dto: UserDto) {
     return this.userService.create(dto);
   }
 
   @Put(':id')
-  @ApiResponse({ example: true })
-  update(@Param() { id }: UserParams, @Body() dto: UpdateUserDto) {
+  @ApiResponse({ model: Boolean })
+  update(@Param() { id }: UserParams, @Body() dto: UserDto) {
     return this.userService.update(id, dto);
   }
 
   @Delete(':id')
-  @ApiResponse({ example: true })
+  @ApiResponse({ model: Boolean })
   delete(@Param() { id }: UserParams) {
     return this.userService.delete(id);
   }

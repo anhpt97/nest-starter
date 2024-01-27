@@ -1,15 +1,7 @@
-import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsEnum,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Validate,
-} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 import { UserRole, UserStatus } from '~/common/enums';
-import { ConvertToNumber, isPassword, isUsername } from '~/utils';
+import { ConvertToNumber } from '~/utils';
 
 export class UserParams {
   @IsInt()
@@ -18,10 +10,14 @@ export class UserParams {
   id: number;
 }
 
-export class UpdateUserDto {
+export class UserQuery {
+  @IsOptional()
+  @ApiPropertyOptional()
+  keyword: string;
+}
+
+export class UserDto {
   @IsString()
-  @IsNotEmpty()
-  @Validate(isUsername)
   @ApiProperty({ example: '' })
   username: string;
 
@@ -30,26 +26,11 @@ export class UpdateUserDto {
   @ApiPropertyOptional({ example: '' })
   email: string;
 
-  @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  @Validate(isPassword)
-  @ApiPropertyOptional({ example: '' })
-  password: string;
-
   @IsEnum(UserRole)
-  @ApiProperty({ example: UserRole.ADMIN })
+  @ApiProperty({ enum: UserRole })
   role: UserRole;
 
   @IsEnum(UserStatus)
-  @ApiProperty({ example: UserStatus.ACTIVE })
+  @ApiProperty({ enum: UserStatus })
   status: UserStatus;
-}
-
-export class CreateUserDto extends OmitType(UpdateUserDto, ['password']) {
-  @IsString()
-  @IsNotEmpty()
-  @Validate(isPassword)
-  @ApiProperty({ example: '' })
-  password: string;
 }
