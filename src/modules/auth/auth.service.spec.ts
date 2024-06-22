@@ -58,14 +58,13 @@ describe('AuthService', () => {
       });
       const accessToken =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-      const result: LoginResponse = { accessToken };
       jest.spyOn(jwtService, 'sign').mockReturnValue(accessToken);
       await expect(
         authService.login({
           username: 'superadmin',
           password: 'envy1362987212538',
         }),
-      ).resolves.toEqual(result);
+      ).resolves.toEqual<LoginResponse>({ accessToken });
     });
 
     it('should throw invalid password error', async () => {

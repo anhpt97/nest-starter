@@ -75,7 +75,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
   private transformErrorMessages(messages: string[]): ValidationError[] {
     return messages.map((message) => {
       message = message.replace(/(\.)(\d+)/g, '[$2]');
-      if (message.includes('each value in ')) {
+      if (message.includes('each value in')) {
         message = message.replace(/each value in (nested property )?/, '');
         return {
           field: message.split(' ')[0],
