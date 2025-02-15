@@ -1,0 +1,44 @@
+- Build an image:
+  docker build . -t <image_name>[:<image_tag>]
+  (default tag: "latest")
+
+- Create and run container(s):
+  docker run (-d) <container_id/container_name> | docker compose up (--build, -d)
+
+- List containers:
+  docker ps (-a)
+  ("-a": Show all containers, including stopped containers)
+
+- List images:
+  docker images
+
+- Log in to a registry:
+  docker login <registry_hostname>[:<registry_port>]
+
+- Log out of a registry:
+  docker logout <registry_hostname>[:<registry_port>]
+
+- Remove all unused containers, networks and dangling images:
+  docker system prune -f (-a, --volumes)
+
+- Remove container(s):
+  docker rm -f <container_id/container_name> [...<container_id_N/container_name_N>]
+
+- Remove image(s):
+  docker rmi -f <image_id/image_name> [...<image_id_N/image_name_N>]
+
+- SSH into a container:
+  docker exec -it <container_id/container_name> bash
+
+- Stop container(s) | Stop and remove container(s), network(s):
+  docker stop <container_id/container_name> [...<container_id_N/container_name_N>] | docker compose down (-v)
+
+- Upload an image to a registry:
+  docker push <registry_hostname>[:<registry_port>]/...
+
+Notes:
+- "--build": Rebuild image(s) before running container(s)
+- "--volumes": Prune anonymous volumes
+- "-a": Remove all unused images, not just dangling ones
+- "-d": Run container(s) in the background
+- "-v": Remove volume(s) attached to container(s)

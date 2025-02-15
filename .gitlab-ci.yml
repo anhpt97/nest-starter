@@ -1,0 +1,34 @@
+image: node:alpine
+
+cache:
+  paths:
+    - node_modules
+
+install_dependencies:
+  stage: .pre
+  script: yarn
+
+build:
+  stage: build
+  script: yarn build
+
+test:
+  stage: test
+  script:
+    - yarn lint --max-warnings=0
+    - yarn tsc --noEmit
+
+deploy:
+  stage: deploy
+  before_script:
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | ssh-add -
+    - mkdir ~/.ssh
+    - ssh-keyscan $EC2_PUBLIC_IP_ADDRESS > ~/.ssh/known_hosts
+  script:
+    # - ssh $EC2_USER@$EC2_PUBLIC_IP_ADDRESS "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_IMAGE"
+    - ssh $EC2_USER@$EC2_PUBLIC_IP_ADDRESS "docker pull $CI_REGISTRY_IMAGE"
+    - ssh $EC2_USER@$EC2_PUBLIC_IP_ADDRESS "docker compose up -d"
+    - ssh $EC2_USER@$EC2_PUBLIC_IP_ADDRESS "docker system prune -f"
+  when: manual
