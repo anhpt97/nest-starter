@@ -1,0 +1,18 @@
+{
+  "DISABLED_ACCOUNT": "Account has been disabled",
+  "EMAIL_ALREADY_EXISTS": "Email already exists",
+  "EXPIRED_TOKEN": "Token has expired",
+  "FILE_NOT_FOUND": "File not found",
+  "FILE_TOO_LARGE": "File too large",
+  "INCORRECT_PASSWORD": "Incorrect password",
+  "INTERNAL_SERVER_ERROR": "Internal Server Error",
+  "INVALID_FILE_FORMAT": "Invalid file format",
+  "INVALID_INPUT": "Invalid input",
+  "INVALID_TOKEN": "Invalid token",
+  "MISSING_JWT_VALIDATION": "Missing JWT validation",
+  "NEW_PASSWORD_SAME_AS_CURRENT_PASSWORD": "New password is same as current password",
+  "PERMISSION_DENIED": "Permission denied",
+  "UNACTIVATED_ACCOUNT": "Account has not been activated",
+  "USER_NOT_FOUND": "User not found",
+  "USERNAME_ALREADY_EXISTS": "Username already exists"
+}
